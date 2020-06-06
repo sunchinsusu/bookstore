@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        #inputSearch{
+            border-radius: 20px;
+            margin-top: 10%;
+        }
+
+        #header{
+            background-color: #0C2659;
+        }
+
+        #new{
+            font-family: cursive;
+            font-size: large;
+        }
+        .name-book{
+            font-size: large;
+            font-weight: bold;
+            font-family: 'Times New Roman', Times, serif;
+            color: rgb(27, 27, 27);
+        }
+        .price-book{
+            font-size: x-large;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar" id="header">
+    <div class="container">
+        <a class="navbar-brand dropdown" style="font-family: cursive; color: white;" href="/home">
+            <i class="fa fa-home" aria-hidden="true"></i>
+            Book Store
+        </a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active dropdown">
+                    <a class="nav-link dropdown-toggle" style="font-family: cursive; color: white;" href="#"
+                       id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                        Category
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #63D8F2;" >
+                        <a th:each="ctg : ${T(com.ntt.entity.Category).values()}" th:href="@{'/search/category/' + ${ctg}}" class="dropdown-item" th:utext="${ctg.getDisplayValue()}"></a>
+                    </div>
+                </li>
+                <li class="nav-item" >
+                    <a class="nav-link" href="/account" style="font-family: cursive; color: white;">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                        Account
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/cart" style="font-family: cursive; color: white;">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        Cart
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container" id="content">
+    <div class="row">
+        <div class="col-md-5 offset-md-7">
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <input type="text" name="" id="inputSearch" class="form-control" value="" required="required"
+                           placeholder="Search" title="" onchange="search()">
+                </div>
+            </div>
+        </div>
+    </div>
+        <br />
+
+        <div class="row">
+            <img th:src="${book.url}" class="rounded float-left col-md-3 offset-md-1">
+            <div class="col-md-4">
+                <legend style=" font-weight: bold; font-family: cursive" th:utext="${book.name}">
+                </legend>
+                <div th:utext="${book.author}"></div>
+                <br/>
+                <div class="price-book" th:utext="${(book.salePrice - book.saleOff)+'$'}"></div>
+                <strike th:utext="${book.salePrice}"></strike>
+                <div class="input-group pt-2">
+                    <form action="/add-to-cart" method="post">
+                        <input type="hidden" name="id" th:value="${book.id}"/>
+                        <input type="number" name="quantity" value="1" min="1" class="form-control rounded-right col-md-3" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            Add to cart
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card ">
+                    <h5 class="card-header">
+                        Description
+                    </h5>
+                    <div class="card-body">
+                        <div style="float: left">Category: </div>
+                        <h5 th:utext="${book.category.getDisplayValue()}"></h5>
+                        <p th:utext="${book.des}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <hr>
+        <div class="row">
+            <div class="card col-md-3" style="width: 18rem;" th:each="b : ${random}">
+                <img th:src="${b.url}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="name-book">
+                        <a th:href="@{'/detail/'+${b.id}}" th:utext="${b.name}"></a>
+                    </p>
+                    <div class="price-book" th:utext="${(b.salePrice-b.salePrice*b.saleOff)+'$'}"></div>
+                    <strike th:utext="${b.salePrice+'$'}"></strike>
+                    <div class="input-group">
+                        <form action="/add-to-cart" method="post">
+                            <input type="number" name="quantity" class="form-control rounded-right" required value="1" min="1"/>
+                            <input type="hidden" name="id" th:value="${b.id}"/>
+                            <button type="submit" class="btn btn-primary">Add to cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br /><br />
+        <legend style="font-weight: bold;">Author</legend>
+        <hr />
+
+    </div>
+
+    <footer class="py-4" id="contact" style="background-color: #0C2659;">
+        <div class="container">
+            <div style="color: white;">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <legend>Contact with us</legend>
+                        <i class="fa fa-map-marker" style="width:30px"></i> Hanoi, VN<br>
+                        <i class="fa fa-phone" style="width:30px"></i> Phone: +98 969 344 172<br>
+                        <i class="fa fa-envelope" style="width:30px"> </i> Email: tienthuat280798@mail.com<br /><br />
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                        <form action="" method="POST" role="form">
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                    <input type="text" class="form-control" id="" placeholder="Name">
+                                </div>
+                                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                    <input type="email" class="form-control" id="" placeholder="Email">
+                                </div>
+                            </div>
+                            <br />
+                            <textarea type="text" class="form-control" id="" placeholder="Message"
+                                style="height: 10em;"></textarea>
+                            <br />
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <p class="m-0 text-left text-white"> &circledR; 2020 TienThuatNguyen</p>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Optional JavaScript -->
+    <script type="text/javascript">
+        function search() {
+            var link = "/search/name/"+ $("#inputSearch").val();
+            location.href = link;
+        }
+    </script>
+</body>
+
+</html>

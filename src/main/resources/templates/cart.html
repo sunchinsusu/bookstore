@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="css/home.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar" id="header">
+        <div class="container">
+            <a class="navbar-brand dropdown" style="font-family: cursive; color: white;" href="/home">
+                <i class="fa fa-home" aria-hidden="true"></i>
+                Book Store
+            </a>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active dropdown">
+                        <a class="nav-link dropdown-toggle" style="font-family: cursive; color: white;" href="#"
+                            id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            <i class="fa fa-bars" aria-hidden="true"></i>
+                            Category
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #63D8F2;" >
+                            <a th:each="ctg : ${T(com.ntt.entity.Category).values()}" th:href="@{'/search/category/' + ${ctg}}" class="dropdown-item" th:utext="${ctg.getDisplayValue()}"></a>
+                        </div>
+                    </li>
+                    <li class="nav-item" >
+                        <a class="nav-link" href="/account" style="font-family: cursive; color: white;">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            Account
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/cart" style="font-family: cursive; color: white;">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            Cart
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br/><br/>
+    <div class="container" id="content">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="cart-tab" data-toggle="tab" href="#cart" role="tab" aria-controls="cart"
+                    aria-selected="true" style="font-weight: bold;">
+                    Your cart
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" id="orderlist-tab" data-toggle="tab" href="#orderlist" role="tab"
+                    aria-controls="profile" aria-selected="false" style="font-weight: bold;">
+                    Oder list
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+                <div class="row">
+                    <!-- Page Content -->
+                    <div class="container col-md-4 offset-md-4" th:if="${items.size()==0}" style="margin-top: 7%">
+                        <img src="/images/empty.png" style="width: 40%"/>
+                        <div style="font-size: x-large; font-weight: bold; font-family: Consolas;">Your cart is empty...choose book to don't see me</div>
+                    </div>
+                    <div class="container" th:if="${items.size()>0}">
+                        <form method="post">
+                            <div class="row">
+
+                                <!-- Sidebar Widgets Column -->
+                                <div class="col-md-12">
+
+                                    <!-- Your Cart -->
+                                    <div class="card my-4">
+                                        <h5 class="card-header" style="background-color: rgb(255, 196, 87);">
+                                            <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                            Item
+                                        </h5>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <table class="table table-striped table-bordered table-responsive">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="width: 8%;">No</th>
+                                                            <th style="width: 40%;">Name</th>
+                                                            <th style="width: 14%;">Old Price</th>
+                                                            <th style="width: 14%;">New Price</th>
+                                                            <th style="width: 10%;">Quantity</th>
+                                                            <th style="width: 14%;">Total</th>
+                                                            <th></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr th:each="item, state : ${items}">
+                                                            <th th:utext="${state.index +1}" style="text-align: center"></th>
+                                                            <td th:utext="${item.getBook().getName()}"></td>
+                                                            <th th:utext="${item.getPrice()}+'$'" style="text-align: right;">
+                                                            </th>
+                                                            <th th:utext="${item.getPriceAfterDiscount()}+'$'"
+                                                                style="text-align: right;"></th>
+                                                            <td th:utext="${item.getQuantity()}" style="text-align: right;">
+                                                            </td>
+                                                            <th th:utext="${item.getTotal()}+'$'" style="text-align: right;">
+                                                            </th>
+                                                            <td>
+                                                                <a th:href="@{/removeItem/}+${state.index}" type="button"
+                                                                   class="btn btn-secondary">
+                                                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="5" style="text-align: right;">Subtotal :</th>
+                                                            <th th:utext="${subtotal}+'$'" style="text-align: right;"></th>
+                                                            <th></th>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Delivery -->
+                                    <div class="card my-4">
+                                        <h5 class="card-header" style="background-color: rgb(255, 196, 87);">
+                                            <i class="fa fa-truck" aria-hidden="true"></i>
+                                            Delivery
+                                        </h5>
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label"
+                                                       style="text-align: right; font-weight: bold;">Name: </label>
+                                                <div class="col-sm-6">
+                                                    <input name="receiver" th:value="${user.name}" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label"
+                                                       style="text-align: right; font-weight: bold;">Address: </label>
+                                                <div class="col-sm-6">
+                                                    <input name="receiveAddress" th:value="${user.address}" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label"
+                                                       style="text-align: right; font-weight: bold;">Tel: </label>
+                                                <div class="col-sm-3">
+                                                    <input name="receivePhone" th:value="${user.tel}" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label"
+                                                       style="text-align: right; font-weight: bold;">Email: </label>
+                                                <div class="col-sm-3">
+                                                    <input th:value="${user.email}" type="email" class="form-control" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Payment -->
+                                    <div class="card my-4">
+                                        <h5 class="card-header" style="background-color: rgb(255, 196, 87);">
+                                            <i class="fa fa-university" aria-hidden="true"></i>
+                                            Payment
+                                        </h5>
+                                        <div class="card-body">
+                                            Please choose a type of payment!
+                                            <br />
+                                            <br />
+                                            <label class="col-md-4" style="float: left;">
+                                                <input name="method" id="cash" type="radio" value="cash" checked="checked" onchange="changeMethod()" />
+                                                Payment with cash
+                                                <br />
+                                                <img src="images/ghtk.png" style="height: 120px; padding-top: 10px;" />
+                                            </label>
+                                            <label style="padding-left: 30px;" class="col-md-4">
+                                                <input name="method" id="paypal" type="radio" value="paypal"  onchange="changeMethod()"/>
+                                                Payment with Paypal
+                                                <br />
+                                                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg"
+                                                     alt="PayPal Acceptance Mark">
+                                            </label>
+                                            </td>
+                                            <br />
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 offset-md-4">
+                                    <form action="/booking-cash" method="get">
+                                        <input type="hidden" name="subtotal" th:value="${subtotal}" />
+                                        <button type="submit" class="btn btn-primary" formaction="/booking-cash" id="btnBooking">Booking</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                            <br /><br /><br />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="orderlist" role="tabpanel" aria-labelledby="orderlist-tab">
+                <div class="order-cancel" th:each="order, iState : ${listOrder}">
+                    <br />
+                    <div class="card" th:switch="${order.status}">
+                        <div  class="card-header " style="background-color: #dc3545 " th:case="${T(com.ntt.entity.InvoiceStatus).Da_huy}">
+                            <a style="color: aliceblue; font-size: medium; font-weight: bold;" data-toggle="collapse"
+                               th:href="${'#collapse'+ iState.index}" role="button" aria-expanded="false"
+                               aria-controls="collapseBasicInfor">
+                                <i class="fa fa-times" aria-hidden="true" th:utext="${order.date}"></i>
+                                Cancel
+                            </a>
+                        </div>
+
+                        <div class="card-header" style="background-color:  #28a745" th:case="${T(com.ntt.entity.InvoiceStatus).Da_giao_hang}">
+                            <a style="color: aliceblue; font-size: medium; font-weight: bold;" data-toggle="collapse"
+                               th:href="${'#collapse'+ iState.index}" role="button" aria-expanded="false"
+                               aria-controls="collapseBasicInfor">
+                                <i class="fa fa-check" aria-hidden="true" th:utext="${order.date}"></i>
+                                Succes
+                            </a>
+                        </div>
+
+                        <div div class="card-header" style="background-color: #ffc107" th:case="*">
+                            <a style="color: aliceblue; font-size: medium; font-weight: bold;" data-toggle="collapse"
+                               th:href="${'#collapse'+ iState.index}" role="button" aria-expanded="false"
+                               aria-controls="collapseBasicInfor">
+                                <i class="fa fa-spinner" aria-hidden="true" th:utext="${order.date}"></i>
+                                Processing
+                            </a>
+                        </div>
+
+
+                        <div class="collapse" th:id="${'collapse'+iState.index}">
+
+                            <div class="card card-body">
+                                <button th:onclick="'cancelOrder('+${order.id}+')'" type="button" class="btn btn-danger offset-md-10 mt-4 mb-2" th:if="${order.status == T(com.ntt.entity.InvoiceStatus).Da_xac_nhan}">Cancel Order</button>
+                                <div class="row">
+                                        <table class="table table-striped table-bordered" style="width: 100%">
+                                            <tr>
+                                                <th colspan="2" style="width: 50%; text-align: center;" th:utext="${order.receiver}"></th>
+                                                <th colspan="2" style="width: 30%; text-align: right;">Total payment :</th>
+                                                <td th:utext="${order.getTotalPayment()}+'$'" style="width: 20%; text-align: right;"></td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" style="width: 50%; text-align: center;" th:utext="${order.receiveAddress}"></th>
+                                                <th colspan="2" style="width: 30%; text-align: right;">Method :</th>
+                                                <td th:utext="${order.getPaymentMethod()}" style="width: 20%;text-align: right;"></td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" style="width: 50%; text-align: center;" th:utext="${order.receivePhone}"></th>
+                                                <th colspan="2" style="width: 30%;text-align: right;">Status :</th>
+                                                <td th:utext="${order.getStatus().getDisplayValue()}" style="width: 20%;text-align: right;"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5" style="width: 100%;"></td>
+                                            </tr>
+                                            <tr class="thead-dark">
+                                                <th style="width: 10%; text-align: center">No</th>
+                                                <th style="width: 40%; text-align: center">Name</th>
+                                                <th style="width: 15%; text-align: center">Price</th>
+                                                <th style="width: 15%; text-align: center">Quantity</th>
+                                                <th style="width: 20%; text-align: center">Total</th>
+                                            </tr>
+                                            <tr th:each="item, state : ${order.items}">
+                                                <th th:utext="${state.index +1}" style="text-align: center"></th>
+                                                <td th:utext="${item.getBook().getName()}"></td>
+                                                <th th:utext="${item.getPriceAfterDiscount()}+'$'"
+                                                    style="text-align: right;"></th>
+                                                <td th:utext="${item.getQuantity()}" style="text-align: right;">
+                                                </td>
+                                                <th th:utext="${item.getTotal()}+'$'" style="text-align: right;">
+                                                </th>
+                                            </tr>
+                                        </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <footer class="py-4" id="contact" style="background-color: #0C2659; margin-top: 20%">
+        <div class="container">
+            <div style="color: white;">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <legend>Contact with us</legend>
+                        <i class="fa fa-map-marker" style="width:30px"></i> Hanoi, VN<br>
+                        <i class="fa fa-phone" style="width:30px"></i> Phone: +98 969 344 172<br>
+                        <i class="fa fa-envelope" style="width:30px"> </i> Email:
+                        tienthuat280798@mail.com<br /><br />
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                        <form action="" method="POST" role="form">
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                                    <input type="text" class="form-control" id="" placeholder="Name">
+                                </div>
+                                <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                                    <input type="email" class="form-control" id="" placeholder="Email">
+                                </div>
+                            </div>
+                            <br />
+                            <textarea type="text" class="form-control" id="" placeholder="Message"
+                                style="height: 10em;"></textarea>
+                            <br />
+                            <button type="submit" class="btn btn-primary">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <p class="m-0 text-left text-white"> &circledR; 2020 TienThuatNguyen</p>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<!--    bootbox-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Optional JavaScript -->
+    <script type="text/javascript" src="/js/cart.js"></script>
+</body>
+
+</html>

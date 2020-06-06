@@ -1,0 +1,34 @@
+#inputSearch{
+    border-radius: 20px;
+    margin-top: 10%;
+}
+
+body{
+    /* background-color: #2cd9d9; */
+}
+
+#content{
+    /* background-color: #e5ffff; */
+    /* box-shadow: 6px 6px 6px #e5ffff; */
+}
+
+#header{
+    background-color: #0C2659;
+}
+
+#new{
+    font-family: cursive;
+    font-size: large;
+}
+.name-book{
+    font-size: large;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(27, 27, 27);
+}
+.price-book{
+    font-size: x-large;
+    font-weight: bolder;
+}
+
+
