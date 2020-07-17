@@ -8,6 +8,7 @@ This is a E-commerce website with functions:
 + Payment with Paypal
 + Order tracking
 + Api for that functions
++ Add, Edit, Update, Delete product
 
 # Use:
 - Mysql
@@ -16,6 +17,7 @@ This is a E-commerce website with functions:
 - Thymleaf
 - Bootstrap
 - Restful
+- ReactJs
 - Tomcat
 
 Contact me: thuatnt280798@gmail.com
