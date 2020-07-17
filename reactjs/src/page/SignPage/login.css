@@ -1,0 +1,33 @@
+/* body {
+    background-color: #63D8F2;
+} */
+
+.card {
+    margin-top: 20%;
+
+}
+
+legend {
+    margin-top: 5%;
+    text-align: center;
+    font-size: xx-large;
+    font-weight: bolder;
+    font-family: cursive;
+    color: #0C2659;
+}
+
+.title {
+    text-align: left;
+    font-size: large;
+    font-weight: bolder;
+    font-family: Arial;
+    color: #0C2659;
+}
+
+#form {
+    padding-top: 10%;
+}
+
+#listlink {
+    padding-top: 5%;
+}
