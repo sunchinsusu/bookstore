@@ -20,7 +20,7 @@ This is a E-commerce website with functions:
 - ReactJs
 - Tomcat
 
-Contact me: thuatnt280798@gmail.com
+Contact me: thuatnt.tech@gmail.com
 
 
 ![Alt text](/src/main/resources/static/images/login.png)
